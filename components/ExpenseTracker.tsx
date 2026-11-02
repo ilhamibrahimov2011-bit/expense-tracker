@@ -1,42 +1,73 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { supabase } from "../lib/supabase";
 
 type Expense = {
   id: number;
   amount: number;
   category: string;
   date: string;
-  note: string;
+  note: string | null;
 };
 
 const CATEGORIES = ["Food", "Transport", "Shopping", "Bills", "Fun", "Other"];
 
 export default function ExpenseTracker() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [date, setDate] = useState("");
   const [note, setNote] = useState("");
 
-  function handleSubmit(e: FormEvent) {
+  useEffect(() => {
+    async function loadExpenses() {
+      const { data, error } = await supabase
+        .from("expenses")
+        .select("*")
+        .order("date", { ascending: false })
+        .order("id", { ascending: false });
+
+      if (error) {
+        setError(error.message);
+      } else {
+        setExpenses(data as Expense[]);
+      }
+      setLoading(false);
+    }
+    loadExpenses();
+  }, []);
+
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const value = parseFloat(amount);
     if (!value || value <= 0 || !date) return;
 
-    const newExpense: Expense = {
-      id: Date.now(),
-      amount: value,
-      category,
-      date,
-      note,
-    };
-    setExpenses([newExpense, ...expenses]);
+    const { data, error } = await supabase
+      .from("expenses")
+      .insert({ amount: value, category, date, note: note || null })
+      .select()
+      .single();
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setError("");
+    setExpenses([data as Expense, ...expenses]);
     setAmount("");
     setNote("");
   }
 
-  function handleDelete(id: number) {
+  async function handleDelete(id: number) {
+    const { error } = await supabase.from("expenses").delete().eq("id", id);
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    setError("");
     setExpenses(expenses.filter((expense) => expense.id !== id));
   }
 
@@ -89,11 +120,15 @@ export default function ExpenseTracker() {
         </button>
       </form>
 
+      {error && <p className="text-red-500">Error: {error}</p>}
+
       <div>
         <h2 className="text-xl font-semibold mb-3">
           Total: ${total.toFixed(2)}
         </h2>
-        {expenses.length === 0 ? (
+        {loading ? (
+          <p className="text-gray-500">Loading...</p>
+        ) : expenses.length === 0 ? (
           <p className="text-gray-500">No expenses yet. Add your first one above.</p>
         ) : (
           <ul className="flex flex-col gap-2">
