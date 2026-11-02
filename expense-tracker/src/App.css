@@ -1,0 +1,39 @@
+#root { max-width: 480px; margin: 0 auto; padding: 40px 16px 64px; }
+h1 { font-size: 2.4rem; margin: 0 0 24px; }
+form { display: flex; flex-direction: column; gap: 14px; }
+input, select { font: inherit; background: #fff; color: #111; border: 0; border-radius: 6px; padding: 16px; width: 100%; }
+input::placeholder { color: #777; }
+input:focus-visible, select:focus-visible { outline: 3px solid #2f5cf0; }
+button { font: inherit; cursor: pointer; }
+.add { background: #2f5cf0; color: #fff; font-weight: 700; border: 0; border-radius: 6px; padding: 18px; }
+.add:hover { background: #4a73ff; }
+.total { font-size: 1.5rem; font-weight: 700; margin: 40px 0 20px; }
+ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+li { display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid #fff; border-radius: 6px; padding: 20px 24px; }
+li small { display: block; color: #777; }
+.del { background: none; border: 0; color: #e5484d; font-size: 1.1rem; }
+.empty { color: #777; }
+body { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; }
+#root { width: 100%; max-width: 380px; padding: 20px 16px; }
+h1 { font-size: 1.8rem; text-align: center; margin: 0 0 16px; }
+form { gap: 8px; }
+input, select { padding: 8px 12px; font-size: 16px; }
+.add { padding: 10px; }
+.total { font-size: 1.2rem; text-align: center; margin: 24px 0 12px; }
+ul { gap: 8px; }
+li { padding: 10px 14px; }
+input[type="date"] { color-scheme: light; }
+input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; transform: scale(1.3); }
+@media (max-width: 480px) { #root { padding: 12px; } h1 { font-size: 1.5rem; } }
+#root { max-width: 340px; }
+h1 { font-size: 1.5rem; margin: 0 0 12px; }
+form { gap: 6px; }
+input, select { padding: 6px 10px; font-size: 16px; border-radius: 5px; }
+.add { padding: 8px; font-size: 0.95rem; }
+.total { font-size: 1.05rem; margin: 18px 0 10px; }
+ul { gap: 6px; }
+li { padding: 8px 12px; font-size: 0.95rem; }
+.del { font-size: 0.95rem; }
+body { align-items: flex-start; }
+#root { margin-top: 8vh; }
+@media (max-width: 480px) { #root { margin-top: 4vh; } }
